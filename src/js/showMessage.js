@@ -22,14 +22,12 @@ export function showSuccessMessage(didSucceed) {
     const closeModal = document.querySelector('.close-btn');
 
     if (didSucceed) {
-		// TODO: The `alreadySubmitted` message is wrongly showing before 
-		// the user has successfully submitted the form. We need to fix this!
-        if (getHasSubmitted) {
-            modalMessage.textContent = messageContent.alreadySubmitted;
-        } else {
-            modalMessage.textContent = messageContent.success;
-            setHasSubmitted(true);
-        }
+      if (getHasSubmitted()) {
+        modalMessage.textContent = messageContent.alreadySubmitted;
+      } else {
+        modalMessage.textContent = messageContent.success;
+        setHasSubmitted(true);
+      }
     } else {
         modalMessage.textContent = messageContent.error;
     }
