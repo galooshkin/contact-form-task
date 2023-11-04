@@ -13,12 +13,46 @@
     <div class="form-container">
         <h1>Contact Us</h1>
         <form>
-            <input type="text" name="name" placeholder="Your name" class="input-field">
-            <input type="text" name="email" placeholder="Your email *" class="input-field">
-            <textarea name="message" placeholder="Your message *" class="input-field"></textarea>
-            <input type="submit" value="Send" class="submit-btn">
+          <label for="name">Your Name:</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Your name"
+            class="input-field"
+          />
+          <div class="error-message" id="nameError" aria-live="polite"></div>
+  
+          <label for="email">Your Email:</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Your email *"
+            class="input-field"
+            required
+            aria-describedby="emailHint"
+          />
+          <div class="error-message" id="emailError" aria-live="polite">
+            email is not valid
+          </div>
+  
+          <label for="message">Your Message:</label>
+          <textarea
+            name="message"
+            id="message"
+            placeholder="Your message *"
+            class="input-field"
+            required
+            aria-describedby="messageHint"
+          ></textarea>
+          <div class="error-message" id="messageError" aria-live="polite">
+            message is not valid
+          </div>
+  
+          <input type="submit" value="Send" class="submit-btn" id="submit" />
         </form>
-    </div>
+      </div>
 
     <!-- Message modal -->
     <div id="modal" class="modal">
