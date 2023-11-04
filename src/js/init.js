@@ -1,3 +1,3 @@
-import { validate } from './validateForm.js';
+import { hydrateForm } from "./hydrateForm.js";
 
-validate();
+hydrateForm();

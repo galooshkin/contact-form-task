@@ -1,19 +1,70 @@
-import { showSuccessMessage, setHasSubmitted } from './showMessage.js';
+import { selectors } from "./selectors.js";
 
-export function validate() {
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+const { modal, closeModal, modalMessage } = selectors;
 
-        const email = document.querySelector('input[name="email"]').value;
-        const message = document.querySelector('textarea[name="message"]').value;
+const messageContent = {
+  success: "Your form has been successfully submitted!",
+  error: "There was a validation error. Please check your input!",
+  alreadySubmitted: "You have already submitted this form!",
+};
 
-        // Basic form validation: check for '@' in email field and non-blank message field
-        // TODO: This validation could probably be improved!
-        if (email.includes('@') && message) {
-            showSuccessMessage(true);
-        } else {
-            showSuccessMessage(false);
-        }
-    });
+let successState = false;
+
+// Getter function for successState
+export function getHasSubmitted() {
+  return successState;
+}
+
+// Setter function for successState
+export function setHasSubmitted(value) {
+  successState = value;
+}
+
+export function showMessageModal() {
+  modal.style.display = "block";
+}
+
+export function hideMessageModal() {
+  modal.style.display = "none";
+}
+
+export function showSuccessMessage(didSucceed) {
+  closeModal.onclick = function () {
+    hideMessageModal();
+  };
+
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  if (!didSucceed) {
+    modalMessage.textContent = messageContent.error;
+    return showMessageModal();
+  }
+
+  modalMessage.textContent = getHasSubmitted()
+    ? messageContent.alreadySubmitted
+    : messageContent.success;
+
+  setHasSubmitted(true);
+
+  showMessageModal();
+}
+
+export function showErrorMessage(message, target) {
+  target.style.display = "block";
+}
+
+export function showFormMessage(messages) {
+  errorMessage.style.display = "block";
+  errorMessage.innerHTML = "";
+  messages.forEach((message) => {
+    const errorElement = document.createElement("div");
+    errorElement.className = "error-message";
+    errorElement.textContent = message;
+    errorElement.style.display = "block";
+    errorMessage.appendChild(errorElement);
+  });
 }
