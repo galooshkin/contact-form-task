@@ -4,6 +4,7 @@ import { selectors } from "./selectors.js";
 
 const {
   form,
+  nameField,
   emailField,
   messageField,
   submitButton,
@@ -37,11 +38,22 @@ const toggleSubmitButton = () => {
     ? enableSubmitButton()
     : disableSubmitButton();
 };
-
+function toggleValidationColors(field, isValid) {
+  !isValid
+    ? field.classList.add("not-valid")
+    : field.classList.remove("not-valid");
+  field.classList.add("valid");
+}
+const validateNameField = (event) => {
+  nameField.style.outline = "none";
+  nameField.classList.add("valid");
+};
 const validateMessageField = (event) => {
   const isValid = validationSchema.message.validate(event.target.value);
-  if (!isValid && event.target.value !== "") {
+  if (!isValid) {
     // show input error
+    messageField.style.outline = "none";
+    toggleValidationColors(messageField, isValid);
     formValidationState.message = false;
     messageError.textContent = validationSchema.message.errorMessage.isNotValid;
     messageError.style.display = "block";
@@ -49,6 +61,7 @@ const validateMessageField = (event) => {
   }
 
   // hide input error
+  toggleValidationColors(messageField, isValid);
   formValidationState.message = true;
   messageError.style.display = "none";
   toggleSubmitButton();
@@ -56,15 +69,16 @@ const validateMessageField = (event) => {
 
 const validateEmailField = (event) => {
   const isValid = validationSchema.email.validate(event.target.value);
-
-  if (!isValid && event.target.value !== "") {
+  emailField.style.outline = "none";
+  if (!isValid) {
     formValidationState.email = false;
+    toggleValidationColors(emailField, isValid);
     emailError.textContent = validationSchema.email.errorMessage.isNotValid;
     emailError.style.display = "block";
     toggleSubmitButton();
     return;
   }
-
+  toggleValidationColors(emailField, isValid);
   formValidationState.email = true;
   emailError.style.display = "none";
   toggleSubmitButton();
@@ -72,6 +86,7 @@ const validateEmailField = (event) => {
 
 export function hydrateForm() {
   form.addEventListener("submit", onSubmitHandler);
+  nameField.addEventListener("keydown", validateNameField);
 
   emailField.addEventListener("blur", validateEmailField);
   emailField.addEventListener("keydown", validateEmailField);
